@@ -55,7 +55,7 @@ func TopicStats(namespace string) StatsCollector {
 			vec: prometheus.NewGaugeVec(prometheus.GaugeOpts{
 				Namespace: namespace,
 				Name:      "e2e_latency_95_percentile",
-				Help:      "Queue e2e latency 95th percentile",
+				Help:      "Queue e2e latency 95th percentile",jjk:Q
 			}, labels),
 		},
 		{

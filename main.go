@@ -8,9 +8,10 @@ import (
 	"net/url"
 	"strings"
 
-	"github.com/lovoo/nsq_exporter/collector"
+	"github.com/ilisin/nsq_exporter/collector"
 
 	"github.com/prometheus/client_golang/prometheus"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
 
 // Version of nsq_exporter. Set at build time.
@@ -42,7 +43,8 @@ func main() {
 	}
 	prometheus.MustRegister(ex)
 
-	http.Handle(*metricsPath, prometheus.Handler())
+	http.Handle(*metricsPath, promhttp.Handler())
+	// http.Handle(*metricsPath, prometheus.Handler())
 	if *metricsPath != "" && *metricsPath != "/" {
 		http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 			w.Write([]byte(`<html>
@@ -72,6 +74,7 @@ func createNsqExecutor() (*collector.NsqExecutor, error) {
 	if err != nil {
 		log.Fatal(err)
 	}
+	log.Printf("enable collectors %s", *enabledCollectors)
 	for _, param := range strings.Split(*enabledCollectors, ",") {
 		param = strings.TrimSpace(param)
 		parts := strings.SplitN(param, ".", 2)
